@@ -14,12 +14,6 @@
   "ai": {
     "binding": "AI"
   },
-  "send_email": [
-    {
-      "name": "CONTACT_EMAIL",
-      "destination_address": "k.saito@tr1ppy.com"
-    }
-  ],
   "vars": {
     "CONTACT_FROM": "no-reply@saip.dev",
     "CONTACT_TO": "k.saito@tr1ppy.com",
