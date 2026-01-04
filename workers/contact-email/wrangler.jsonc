@@ -1,0 +1,17 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "saip-contact-email",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-01-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "send_email": [
+    {
+      "name": "CONTACT_EMAIL",
+      "destination_address": "k.saito@tr1ppy.com"
+    }
+  ],
+  "vars": {
+    "CONTACT_FROM": "no-reply@saip.dev",
+    "CONTACT_TO": "k.saito@tr1ppy.com"
+  }
+}

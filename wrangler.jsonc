@@ -15,8 +15,8 @@
     "binding": "AI"
   },
   "vars": {
-    "CONTACT_FROM": "no-reply@saip.dev",
-    "CONTACT_TO": "k.saito@tr1ppy.com",
+    "CONTACT_WORKER_URL": "",
+    "CONTACT_WORKER_TOKEN": "",
     "AI_GATEWAY_ID": "saip_dev",
     "AI_MODEL": "@cf/meta/llama-4-scout-17b-16e-instruct"
   }

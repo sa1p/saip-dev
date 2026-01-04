@@ -1,14 +1,8 @@
 import type { APIRoute } from "astro";
-import { EmailMessage } from "cloudflare:email";
-
-type SendEmail = {
-	send(message: EmailMessage): Promise<void>;
-};
 
 type Env = {
-	CONTACT_EMAIL: SendEmail;
-	CONTACT_FROM: string;
-	CONTACT_TO: string;
+	CONTACT_WORKER_URL: string;
+	CONTACT_WORKER_TOKEN?: string;
 };
 
 export const prerender = false;
@@ -39,8 +33,6 @@ const isEmail = (value: string) =>
 
 const normalize = (value: unknown) =>
 	typeof value === "string" ? value.trim() : "";
-
-const singleLine = (value: string) => value.replace(/[\r\n]+/g, " ").trim();
 
 export const POST: APIRoute = async ({ request, locals }) => {
 	const env = (locals.runtime?.env ?? {}) as Env;
@@ -85,41 +77,45 @@ export const POST: APIRoute = async ({ request, locals }) => {
 			: htmlResponse("本文が長すぎます。", 400);
 	}
 
-	if (!env.CONTACT_FROM || !env.CONTACT_TO) {
+	const workerUrl = normalize(env.CONTACT_WORKER_URL);
+	if (!workerUrl) {
 		return wantsJson
 			? jsonResponse({ ok: false, error: "送信設定が未設定です。" }, 500)
 			: htmlResponse("送信設定が未設定です。", 500);
 	}
 
-	const subject = singleLine(`New contact from ${name}`);
 	const ip = request.headers.get("cf-connecting-ip") ?? "";
 	const userAgent = request.headers.get("user-agent") ?? "";
-	const body = [
-		`Name: ${name}`,
-		`Email: ${email}`,
-		"",
-		message,
-		"",
-		`IP: ${ip}`,
-		`User-Agent: ${userAgent}`,
-		`Sent: ${new Date().toISOString()}`,
-	].join("\n");
-
-	const raw = [
-		`From: ${env.CONTACT_FROM}`,
-		`To: ${env.CONTACT_TO}`,
-		`Reply-To: ${email}`,
-		`Subject: ${subject}`,
-		`Content-Type: text/plain; charset="UTF-8"`,
-		`Content-Transfer-Encoding: 8bit`,
-		"",
-		body,
-	].join("\n");
-
-	const messageEmail = new EmailMessage(env.CONTACT_FROM, env.CONTACT_TO, raw);
+	const headers: Record<string, string> = {
+		"Content-Type": "application/json",
+		Accept: "application/json",
+	};
+	const workerToken = normalize(env.CONTACT_WORKER_TOKEN ?? "");
+	if (workerToken) {
+		headers["x-contact-token"] = workerToken;
+	}
 
 	try {
-		await env.CONTACT_EMAIL.send(messageEmail);
+		const response = await fetch(workerUrl, {
+			method: "POST",
+			headers,
+			body: JSON.stringify({
+				name,
+				email,
+				message,
+				website,
+				ip,
+				userAgent,
+				sentAt: new Date().toISOString(),
+			}),
+		});
+
+		if (!response.ok) {
+			const data = (await response.json().catch(() => ({}))) as {
+				error?: string;
+			};
+			throw new Error(data?.error ?? "送信に失敗しました。");
+		}
 	} catch {
 		return wantsJson
 			? jsonResponse({ ok: false, error: "送信に失敗しました。" }, 500)
