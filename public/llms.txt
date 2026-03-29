@@ -1,0 +1,13 @@
+# Saip | AI Producer & Engineer
+> Portfolio for Saip, an AI producer/engineer working on AI x entertainment products.
+
+## Primary
+- /
+
+## Contact
+- mailto:info@saip.dev
+- https://x.com/_saip_
+
+## Access
+- Allowed: public pages
+- Disallowed: /api/

@@ -1,4 +1,4 @@
-import { useRef, type PointerEvent, type ReactNode } from "react";
+import { useRef, type CSSProperties, type PointerEvent, type ReactNode } from "react";
 
 type TiltCardProps = {
 	className?: string;
@@ -9,6 +9,14 @@ type TiltCardProps = {
 export default function TiltCard({ className = "", children, intensity = 5 }: TiltCardProps) {
 	const ref = useRef<HTMLDivElement>(null);
 	const frame = useRef<number | null>(null);
+	const baseStyle: CSSProperties = {
+		"--rx": "0deg",
+		"--ry": "0deg",
+		"--hx": "50%",
+		"--hy": "50%",
+	};
+	const baseClass =
+		"relative [transform:perspective(1600px)_rotateX(var(--rx))_rotateY(var(--ry))] [transform-style:preserve-3d] transition-transform duration-200 after:pointer-events-none after:absolute after:inset-0 after:content-[''] after:bg-[radial-gradient(180px_at_var(--hx)_var(--hy),rgba(47,111,95,0.05),transparent_70%)] after:opacity-0 after:transition-opacity hover:after:opacity-100 motion-reduce:transition-none motion-reduce:transform-none";
 
 	const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
 		if (event.pointerType !== "mouse") return;
@@ -41,7 +49,8 @@ export default function TiltCard({ className = "", children, intensity = 5 }: Ti
 	return (
 		<div
 			ref={ref}
-			className={`tilt-card ${className}`}
+			className={`${baseClass} ${className}`}
+			style={baseStyle}
 			onPointerMove={handlePointerMove}
 			onPointerLeave={handlePointerLeave}
 		>
