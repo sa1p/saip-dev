@@ -1,4 +1,5 @@
 import { Send } from "lucide-react";
+import ExperienceStage from "./ExperienceStage";
 import {
   useEffect,
   useMemo,
@@ -57,7 +58,12 @@ const actionLinkClass =
 
 export default function HomePage() {
   return (
-    <main className="relative z-10 mx-auto flex flex-col max-w-6xl gap-14 px-6 pb-22 pt-18 md:gap-20 md:px-12 md:pb-28 md:pt-24">
+    <main id="top" className="portfolio relative z-10 mx-auto flex flex-col max-w-6xl gap-14 px-6 pb-22 pt-7 md:gap-20 md:px-12 md:pb-28 md:pt-9">
+      <nav className="portfolio-nav" aria-label="メインナビゲーション">
+        <a href="#top" className="portfolio-logo" aria-label="saip トップ">saip<span aria-hidden="true">✳</span></a>
+        <span className="portfolio-nav-note">HUMAN IDEAS. AI POSSIBILITIES.</span>
+        <a href="#contact">Let’s talk <span aria-hidden="true">↗</span></a>
+      </nav>
       <HeroSection />
       <WorksSection />
       <footer className="text-center text-[0.8rem] text-(--muted)">
@@ -69,23 +75,30 @@ export default function HomePage() {
 
 function HeroSection() {
   return (
-    <section className="grid items-center gap-9 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+    <section className="portfolio-hero grid items-center gap-9 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]" aria-labelledby="hero-title">
       <Reveal>
-        <p className="text-[0.68rem] uppercase tracking-[0.22em] text-(--muted) font-semibold">
-          AI Producer / Engineer
+        <p className="hero-eyebrow">
+          <span /> AI PRODUCER & ENGINEER
         </p>
-        <h1 className="text-[clamp(2.4rem,3.4vw+1.6rem,4.4rem)] leading-[1.08] font-semibold">
-          Designing the intersection of AI & Emotion.
+        <h1 id="hero-title" className="hero-title">
+          <span className="hero-title-intro">Designing the intersection of</span>
+          <span className="hero-title-ai">AI <span className="hero-ampersand">&</span></span>
+          <span className="hero-title-emotion">Emotion<span>.</span></span>
         </h1>
         <p className="mt-4 max-w-136 text-[1.05rem] text-(--muted)">
-          AI×エンタメの企画から実装、コミュニティまで。静かな熱量で体験を磨き上げます。
+          <strong className="hero-copy-lead">技術に、心が動く瞬間を。</strong>
+          AI×エンタメの企画から実装、コミュニティまで。人の感情に届く体験をつくっています。
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
-          <a className={actionLinkClass} href="mailto:hello@tr1ppy.com">
-            Contact
+          <a className={`${actionLinkClass} hero-primary-link`} href="#experience" onClick={(event) => {
+            event.preventDefault();
+            document.getElementById("experience")?.scrollIntoView({ block: "start" });
+            document.querySelector<HTMLInputElement>("#experience input")?.focus({ preventScroll: true });
+          }}>
+            AIと話してみる <span aria-hidden="true">↗</span>
           </a>
           <a className={actionLinkClass} href="#works">
-            View Works
+            View Works <span aria-hidden="true">↓</span>
           </a>
         </div>
         <div className="mt-5 grid gap-1.5 text-[0.95rem] text-(--muted)">
@@ -98,8 +111,10 @@ function HeroSection() {
           <span>Trippy Inc. / AI × Entertainment</span>
         </div>
       </Reveal>
-      <Reveal delay={0.1}>
-        <PhoneMock />
+      <Reveal delay={0.1} className="hero-stage-reveal">
+        <div id="experience">
+          <ExperienceStage><PhoneMock /></ExperienceStage>
+        </div>
       </Reveal>
     </section>
   );
@@ -109,9 +124,10 @@ function WorksSection() {
   return (
     <section id="works" className="grid gap-6">
       <Reveal delay={0.05}>
-        <h2 className="text-[clamp(1.7rem,2.2vw+1rem,2.5rem)] tracking-[0.01em]">
-          Works
-        </h2>
+        <div className="works-heading">
+          <div><p className="section-kicker">SELECTED WORK & PROFILE</p><h2>Ideas into experiences<span>.</span></h2></div>
+          <span className="works-heading-note">つくったものと、つくる人。</span>
+        </div>
       </Reveal>
 
       <div className="grid gap-4.5 md:grid-cols-2">
@@ -172,17 +188,19 @@ function WorksSection() {
 
         <Reveal className="md:col-span-2" delay={0.15}>
           <a
-            className={`block h-full ${cardSoftClass}`}
+            className={`featured-work block h-full ${cardSoftClass}`}
             href="https://0z.chat"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="オズチャット -Oz Chat- 公式サイト"
           >
             <div className="grid h-full gap-4">
+              <div className="featured-work-top"><span>01 / FEATURED PRODUCT</span><span aria-hidden="true">↗</span></div>
               <h3 className={cardTitleClass}>オズチャット -Oz Chat-</h3>
               <p className={cardDescClass}>
                 AIキャラクターと通話できる没入型チャットアプリ。感情表現と対話体験を拡張するプロダクトとして設計。
               </p>
+              <div className="featured-work-stat"><strong>160,000<span>+</span></strong><span>人が出会った、AIとの新しい日常。</span></div>
               <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
                 <span className={tagClass}>AI Character Voice</span>
                 <span className="text-[0.82rem] font-semibold text-(--accent)">
@@ -808,6 +826,7 @@ function PhoneChat() {
           name="message"
           type="text"
           placeholder="なんでも答えるよ"
+          aria-label="AIへのメッセージ"
           required
           maxLength={MAX_MESSAGE_LENGTH}
           inputMode="text"
@@ -820,6 +839,7 @@ function PhoneChat() {
           className="rounded-full bg-[#f4f2ec] p-2 text-[10px] uppercase tracking-[0.08em] text-[#101010]"
           type="submit"
           disabled={isSending}
+          aria-label="AIへメッセージを送信"
         >
           <Send className="size-4" />
         </button>
@@ -958,7 +978,7 @@ function Reveal({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
@@ -974,6 +994,10 @@ function Reveal({
       setIsVisible(true);
       return;
     }
+
+    // Keep server-rendered content readable while JavaScript loads or is disabled.
+    if (element.getBoundingClientRect().top < window.innerHeight) return;
+    setIsVisible(false);
 
     const observer = new IntersectionObserver(
       (entries, obs) => {
