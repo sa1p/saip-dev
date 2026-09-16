@@ -138,7 +138,7 @@ function WorksSection() {
               株式会社Trippy
               所属。「AI×エンタメ」領域のプロダクト開発において、企画・実装・コミュニティ運営を一気通貫で手がける。代表作『オズチャット
               -Oz
-              Chat-』はユーザー数16万人を突破。LLMによるキャラクター対話や生成AIを活用したクリエイティブ制作を得意とする。
+              Chat-』は累計ユーザー数22万人を突破。LLMによるキャラクター対話や生成AIを活用したクリエイティブ制作を得意とする。
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <span className={tagClass}>AI Product</span>
@@ -200,7 +200,7 @@ function WorksSection() {
               <p className={cardDescClass}>
                 AIキャラクターと通話できる没入型チャットアプリ。感情表現と対話体験を拡張するプロダクトとして設計。
               </p>
-              <div className="featured-work-stat"><strong>160,000<span>+</span></strong><span>人が出会った、AIとの新しい日常。</span></div>
+              <div className="featured-work-stat"><strong>220,000<span>+</span></strong><span>人が出会った、AIとの新しい日常。</span></div>
               <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
                 <span className={tagClass}>AI Character Voice</span>
                 <span className="text-[0.82rem] font-semibold text-(--accent)">
